@@ -1,11 +1,5 @@
-import React from 'react'
+import SimulatorPage from "@/features/simulator/pages/SimulatorPage";
 
-function page() {
-  return (
-    <div>
-      Simulator
-    </div>
-  )
+export default function Page() {
+  return <SimulatorPage />;
 }
-
-export default page

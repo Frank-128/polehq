@@ -1,11 +1,5 @@
-import React from 'react'
+import ConstructorsPage from "@/features/constructors/pages/ConstructorsPage";
 
-function page() {
-  return (
-    <div>
-      COnstructors
-    </div>
-  )
+export default function Page() {
+  return <ConstructorsPage />;
 }
-
-export default page

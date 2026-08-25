@@ -1,7 +1,7 @@
 export const navigation = [
   {
     label: "Dashboard",
-    href: "/dashboard",
+    href: "/",
   },
   {
     label: "Drivers",
@@ -22,5 +22,9 @@ export const navigation = [
   {
     label: "Simulator",
     href: "/simulator",
+  },
+  {
+    label: "Replay",
+    href: "/replay",
   },
 ];

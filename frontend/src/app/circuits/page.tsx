@@ -1,11 +1,5 @@
-import React from 'react'
+import CircuitsPage from "@/features/circuits/pages/CircuitsPage";
 
-function page() {
-  return (
-    <div>
-     Circuits 
-    </div>
-  )
+export default function Page() {
+  return <CircuitsPage />;
 }
-
-export default page

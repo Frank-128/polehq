@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import SearchBar from "./SearchBar";
+import SearchModal from "./SearchModal";
 import MobileDrawer from "./MobileDrawer";
 import { navigation } from "@/features/shared/config/navigation";
 import Image from "next/image";
@@ -14,6 +15,18 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <>
@@ -104,7 +117,7 @@ export default function Navbar() {
               gap-3
             "
           >
-            <SearchBar />
+            <SearchBar onOpen={() => setSearchOpen(true)} />
           </div>
 
           {/* MOBILE */}
@@ -130,7 +143,7 @@ export default function Navbar() {
 
             <div className="flex items-center gap-2">
               <div className="flex-1">
-                <SearchBar />
+                <SearchBar onOpen={() => setSearchOpen(true)} />
               </div>
 
               <button
@@ -164,6 +177,7 @@ export default function Navbar() {
       </header>
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
     </>
   );
 }

@@ -1,62 +1,34 @@
 import TelemetryBadge from "./TelemetryBadge";
-import GenerateInsightsButton from "./GenerateInsightsButton";
+import NextRaceCountdown from "./NextRaceCountdown";
+import { CalendarEntry, SeasonOverview } from "../types/dashboard.types";
 
-export default function DashboardHeader() {
+interface Props {
+  overview: SeasonOverview;
+  nextMeeting: CalendarEntry | null;
+}
+
+export default function DashboardHeader({ overview, nextMeeting }: Props) {
   return (
     <div className="space-y-3">
       {/* Top Row */}
-
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <TelemetryBadge
-            label="Live : Season 2026 Intelligence"
-            active
-          />
-
-          {/* <TelemetryBadge label="Season 2024" />
-
-          <TelemetryBadge label="Intelligence" /> */}
+          <TelemetryBadge label={`Live : Season ${overview.season} Intelligence`} active />
         </div>
 
-        <div className="hidden lg:flex items-center gap-6">
-          <div
-            className="
-              text-[11px]
-              uppercase
-              tracking-[0.12em]
-              text-text-primary
-              font-medium
-            "
-          >
-            Monaco Grand Prix
+        {nextMeeting?.date_start && (
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="text-[11px] uppercase tracking-[0.12em] text-text-primary font-medium">
+              Next: {nextMeeting.meeting_name}
+            </div>
+            <NextRaceCountdown targetDate={nextMeeting.date_start} />
           </div>
-
-          <div
-            className="
-              text-[11px]
-              font-mono
-              text-text-secondary
-            "
-          >
-            04:22:15:08
-          </div>
-
-          <GenerateInsightsButton />
-        </div>
+        )}
       </div>
 
       {/* Bottom Row */}
-
       <div className="flex items-center justify-between">
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-text-primary
-          "
-        >
-          Data Overview Dashboard
-        </h1>
+        <h1 className="text-3xl font-bold text-text-primary">Data Overview Dashboard</h1>
       </div>
     </div>
   );

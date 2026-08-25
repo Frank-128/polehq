@@ -39,3 +39,16 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Python / backend
+backend/venv
+backend/__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+
+# Ingestion run logs (scratch, not part of the repo)
+/logs
+
+# On-demand telemetry replay cache (large, regenerable from OpenF1)
+backend/.cache

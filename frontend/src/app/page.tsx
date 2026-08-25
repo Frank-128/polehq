@@ -1,11 +1,5 @@
-import React from 'react'
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 
-function page() {
-  return (
-    <div className='bg-primary text-blue-400'>
-      Homepage
-    </div>
-  )
+export default function Page() {
+  return <DashboardPage />;
 }
-
-export default page

@@ -1,11 +1,5 @@
-import React from 'react'
+import ArchetypesPage from "@/features/archetypes/pages/ArchetypesPage";
 
-function page() {
-  return (
-    <div>
-      Archetypes
-    </div>
-  )
+export default function Page() {
+  return <ArchetypesPage />;
 }
-
-export default page

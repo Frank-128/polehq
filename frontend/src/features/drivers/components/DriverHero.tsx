@@ -1,20 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { Driver } from "../types/driver.types";
-import { getIntelligenceSummary } from "../data/driverAnalytics.mock";
+import { ArrowLeftRight } from "lucide-react";
+import { DriverDetail } from "../types/driver.types";
 
 interface Props {
-  driver: Driver;
+  driver: DriverDetail;
+  onCompareClick: () => void;
 }
 
-export default function DriverHero({ driver }: Props) {
-  const teamColor = `#${driver.team_colour}`;
-  const summary = getIntelligenceSummary(
-    driver.driver_number,
-    driver.full_name,
-  );
+export default function DriverHero({ driver, onCompareClick }: Props) {
+  const teamColor = driver.team_colour ? `#${driver.team_colour}` : "#666666";
   const driverNumber = String(driver.driver_number).padStart(2, "0");
+  const summary = driver.position
+    ? `P${driver.position} in the ${driver.season} championship with ${driver.points} points, ${driver.wins} win${driver.wins === 1 ? "" : "s"} and ${driver.podiums} podium${driver.podiums === 1 ? "" : "s"}.`
+    : `No championship points recorded yet for the ${driver.season} season.`;
 
   return (
     <div className="flex overflow-hidden border border-[#222] bg-[#0d0d0d] min-h-[200px]">
@@ -28,7 +28,6 @@ export default function DriverHero({ driver }: Props) {
           }}
         />
 
-        {/* Driver headshot */}
         <Image
           src={"/waves.jpg"}
           alt={driver.full_name}
@@ -50,20 +49,23 @@ export default function DriverHero({ driver }: Props) {
       </div>
 
       {/* Centre — name + info */}
-      <div className="flex flex-1  max-sm:px-2 sm:pr-8  justify-center gap-2.5 border-r border-[#222] ">
-        <div className="flex flex-1 flex-col justify-center gap-2.5  border-[#222] sm:px-8 px-2 sm:py-7 py-5">
+      <div className="flex flex-1 max-sm:px-2 sm:pr-8 justify-center gap-2.5 border-r border-[#222]">
+        <div className="flex flex-1 flex-col justify-center gap-2.5 border-[#222] sm:px-8 px-2 sm:py-7 py-5">
           {/* Badges */}
           <div className="flex flex-wrap items-center gap-2.5">
-            <span
-              className="px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.10em] text-white"
-              style={{ background: teamColor }}
-            >
-              {driver.team_name}
-            </span>
-            <span className="flex items-center gap-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[#00C896]">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#00C896]" />
-              Live Intelligence
-            </span>
+            {driver.team_name && (
+              <span
+                className="px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.10em] text-white"
+                style={{ background: teamColor }}
+              >
+                {driver.team_name}
+              </span>
+            )}
+            {driver.position && (
+              <span className="font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-text-muted">
+                WDC P{driver.position}
+              </span>
+            )}
           </div>
 
           {/* Name */}
@@ -75,65 +77,26 @@ export default function DriverHero({ driver }: Props) {
           <p className="max-w-[380px] text-xs leading-relaxed text-[#888]">
             {summary}
           </p>
+
+          <button
+            type="button"
+            onClick={onCompareClick}
+            className="inline-flex h-9 w-fit items-center gap-2 border border-[#333] bg-[#151515] px-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#aaa] transition-colors hover:border-primary/50 hover:text-white"
+          >
+            <ArrowLeftRight size={12} /> Compare Driver
+          </button>
         </div>
 
-        <Image
-          src={driver.headshot_url}
-          alt={driver.full_name}
-          width={100}
-          height={100}
-          style={{outlineColor:`#${driver.team_colour}`}}
-          className="object-cover  outline-2 outline-amber-500 outline-offset-1 rounded-full  self-center object-top sm:w-20 w-12 sm:h-20 h-12"
-        />
-      </div>
-
-      {/* Right — KPI cards */}
-      <div className="flex max-sm:hidden flex-shrink-0">
-        <DriverHeroKpiCard
-          label="Consistency Score"
-          value="98.4"
-          suffix="/100"
-          valueClassName="text-[#E8765A]"
-        />
-        <DriverHeroKpiCard
-          label="Avg. Lap Delta"
-          value="-0.342"
-          suffix="s"
-          valueClassName="text-[#00D2BE]"
-          suffixClassName="text-[22px] font-black text-[#00D2BE]"
-        />
-      </div>
-    </div>
-  );
-}
-
-interface KpiCardProps {
-  label: string;
-  value: string;
-  suffix?: string;
-  valueClassName?: string;
-  suffixClassName?: string;
-}
-
-function DriverHeroKpiCard({
-  label,
-  value,
-  suffix,
-  valueClassName = "",
-  suffixClassName = "text-[13px] font-semibold text-[#444]",
-}: KpiCardProps) {
-  return (
-    <div className="flex w-[160px] flex-col justify-center border-l border-[#222] bg-[#111] px-5 py-6">
-      <p className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[#555]">
-        {label}
-      </p>
-      <div className="flex items-baseline gap-0.5">
-        <span
-          className={`text-[38px] font-black leading-none tracking-[-2px] ${valueClassName}`}
-        >
-          {value}
-        </span>
-        {suffix && <span className={suffixClassName}>{suffix}</span>}
+        {driver.headshot_url && (
+          <Image
+            src={driver.headshot_url}
+            alt={driver.full_name}
+            width={100}
+            height={100}
+            style={{ outlineColor: teamColor }}
+            className="object-cover outline-2 outline-offset-1 rounded-full self-center object-top sm:w-20 w-12 sm:h-20 h-12"
+          />
+        )}
       </div>
     </div>
   );

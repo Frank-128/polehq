@@ -1,31 +1,14 @@
-const BASE_URL = "https://api.openf1.org/v1";
+import { apiGet, ListResponse } from "@/lib/api/client";
+import { Driver, DriverDetail, DriverResult } from "../types/driver.types";
 
-export async function getDrivers() {
-  const response = await fetch(
-    `${BASE_URL}/drivers?session_key=latest`
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch drivers");
-  }
-
-  return response.json();
+export function getDrivers(season?: number) {
+  return apiGet<ListResponse<Driver>>("/drivers", { season });
 }
 
-export async function getDriver(
-  driverNumber: string
-) {
-  const response = await fetch(
-    `${BASE_URL}/drivers?driver_number=${driverNumber}&session_key=latest`
-  );
+export function getDriver(driverNumber: number | string, season?: number) {
+  return apiGet<DriverDetail>(`/drivers/${driverNumber}`, { season });
+}
 
-  if (!response.ok) {
-    throw new Error(
-      "Failed to fetch driver"
-    );
-  }
-
-  const data = await response.json();
-
-  return data[0];
+export function getDriverResults(driverNumber: number | string, season?: number) {
+  return apiGet<ListResponse<DriverResult>>(`/drivers/${driverNumber}/results`, { season });
 }

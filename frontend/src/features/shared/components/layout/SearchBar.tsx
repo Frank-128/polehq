@@ -1,8 +1,14 @@
 import { Search } from "lucide-react";
 
-export default function SearchBar() {
+interface Props {
+  onOpen: () => void;
+}
+
+export default function SearchBar({ onOpen }: Props) {
   return (
     <button
+      type="button"
+      onClick={onOpen}
       className="
   flex
   items-center
